@@ -1,0 +1,1 @@
+git --work-tree=/root/laravel/elearning --git-dir=/root/laravel/elearning.git checkout -f development

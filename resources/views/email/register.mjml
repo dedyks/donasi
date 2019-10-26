@@ -1,0 +1,135 @@
+<mjml>
+  <mj-head>
+    <mj-title>Daftar Elearning Gerakan Sekolah Menyenangkan</mj-title>
+    <mj-font name="Roboto" href="https://fonts.googleapis.com/css?family=Roboto:300,500"></mj-font>
+    <mj-attributes>
+      <mj-all font-family="Roboto, Helvetica, sans-serif"></mj-all>
+      <mj-text font-weight="300" font-size="16px" color="#616161" line-height="24px"></mj-text>
+      <mj-section padding="0px"></mj-section>
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#fafafa">
+    <mj-section>
+      <mj-column width="100%">
+        <mj-image href="#" src="https://i.imgur.com/M0w8PUI.jpg" padding-top="50px" padding-bottom="25px"></mj-image>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" border-top="1px solid #E0E0E0" border-left="1px solid #E0E0E0" border-right="1px solid #E0E0E0">
+      <mj-column width="100%">
+        <mj-text>
+          <h3 style="font-weight: normal; text-align: center;">Terimakasih telah mendaftar di Elearning GSM</h3>
+        </mj-text>
+        <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" border-left="1px solid #E0E0E0" border-right="1px solid #E0E0E0">
+      <mj-column width="50%">
+        <mj-text>
+          <p>Hi, <b><?php echo $name ?></b></p>
+        </mj-text>
+      </mj-column>
+      <mj-column width="50%">
+        <mj-text>
+          <p style="text-align: right;"><?php echo $dt ?></p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" border-left="1px solid #E0E0E0" border-right="1px solid #E0E0E0">
+      <mj-column width="100%">
+        <mj-text>
+            <p><b>Selamat Bergabung di Elearning GSM!</b></p>
+          <p>Mohon verifikasi alamat email Anda dengan cara menekan tombol dibawah. Email yang telah diverifikasi akan mempermudah kami menghubungi Anda jika nomor telepon yang terdaftar tidak dapat dihubungi</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+     <mj-section background-color="#ffffff" border-left="1px solid #E0E0E0" border-right="1px solid #E0E0E0">
+      <mj-column width="100%">
+        <mj-button href="https://www.google.com/" font-family="Helvetica" border-radius="100px" background-color="#2691d4" color="white">
+          VERIFIKASI EMAIL SAYA
+        </mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" border-left="1px solid #E0E0E0" border-right="1px solid #E0E0E0">
+      <mj-column width="100%">
+        <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
+        <mj-text>
+          <b>INFORMASI PRIBADI</b>
+        </mj-text>
+        <mj-table>
+          <tr>
+            <td style="width: 50%;">Nama</td>
+            <td><?php echo $user->name ?></td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td><?php echo $user->email ?></td>
+          </tr>
+          <tr>
+            <td>Pernah mengikuti workshop GSM</td>
+            <td><?php echo $user->attendedWorkshop ?></td>
+          </tr>
+        </mj-table>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" border-left="1px solid #E0E0E0" border-right="1px solid #E0E0E0">
+      <mj-column width="100%">
+        <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
+        <mj-text>
+          <b>INFORMASI SEKOLAH</b>
+        </mj-text>
+        <mj-table>
+          <tr>
+            <td style="width: 40%;">Tingkat</td>
+            <td><span style="background-color: #2691d4; color: #fff; padding: 5px; font-size: 10px; border-radius: 3px; letter-spacing: 1px;"><?php echo $school->bentuk ?></span></td>
+          </tr>
+          <tr>
+            <td>Propinsi</td>
+            <td><?php echo $school->propinsi ?></td>
+          </tr>
+          <tr>
+            <td>Kabupaten/Kota</td>
+            <td><?php echo $school->kabupaten_kota ?></td>
+          </tr>
+          <tr>
+            <td>Kecamatan</td>
+            <td><?php echo $school->kecamatan ?></td>
+          </tr>
+          <tr>
+            <td valign="top">NPSN</td>
+            <td><?php echo $school->npsn ?></td>
+          </tr>
+          <tr>
+            <td>Nama Sekolah</td>
+            <td><?php echo $school->sekolah ?></td>
+          </tr>
+          <tr>
+            <td>Alamat Jalan</td>
+            <td><?php echo $school->alamat_jalan ?></td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td><?php echo $school->status ?></td>
+          </tr>
+        </mj-table>
+      </mj-column>
+    </mj-section>
+   
+    <mj-section background-color="#ffffff" border-bottom="1px solid #E0E0E0" border-left="1px solid #E0E0E0" border-right="1px solid #E0E0E0">
+      <mj-column width="100%">
+        <mj-text>
+            <small><i>Jika mengalami kesulitan atau masalah terkait konfirmasi email Anda, hubungi kami di <a style="color: #2691d4; text-decoration: none;" href="mailto:medup.offficial@gmail.com">elearninggsm@gmail.com</a></i></small>
+        </mj-text>
+        <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
+        <mj-text>
+          <p>Hormat Kami,</p>
+          <p><b>ElearningGSM Team</b></p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-spacer height="50px" />
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

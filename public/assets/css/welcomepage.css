@@ -1,0 +1,120 @@
+.logo {
+    letter-spacing: 0em!important
+}
+
+.mt20{
+    margin-top:20px
+}
+
+.mb10{
+    margin-top:10px
+}
+
+
+.mb20{
+    margin-bottom: 20px
+}
+
+
+.ml15{
+    margin-left:15px;
+}
+
+.mr15{
+    margin-right:15px;
+}
+
+
+
+html{
+    background: #fff!important
+}
+
+.listYoutube{
+    display: var(--layout-horizontal_-_display);
+    position: relative;
+    cursor: pointer;
+}
+
+.thumbnailYouTube{
+    width: 50%;
+    display: inline-block;
+    flex: none;
+    float:left;
+}
+
+.welcomePageTitleUtama2{
+    font-size:20px;text-align:center;margin-bottom: 50px;color:rgb(248, 42, 110)
+}
+
+@media only screen and (max-width : 400px){
+    .welcomePageTitleUtama{
+        font-size:30px!important
+    } 
+
+    .welcomePageTitle{
+        font-size:30px!important
+    }
+
+    .thumbnailYouTube{
+        width:100%
+    }
+    
+    .youTubeMeta{
+        margin-left: -10px;
+        width:100%!important
+    }
+    .welcomePageTitleUtama2{
+        font-size:15px
+    }
+
+}
+
+
+.youTubeMeta{
+    min-width: 0;
+    width: 50%;
+    padding-right: 24px;
+    display: inline-block;
+    float:left;
+    display: flex; 
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    position: relative;
+}
+ .welcomePageTitle{
+    font-family: 'Passion One', cursive;
+    font-size:30px;
+    color:rgb(116, 234, 255);
+    margin-top:50px;
+ }
+
+ .welcomePageTitleUtama{
+    font-family: 'Passion One', cursive;
+    font-size:40px;
+    color:rgb(116, 234, 255);
+    margin-top:50px;
+ }
+
+ .footer{
+     position: relative!important;
+     background-color: white!important;
+ }
+
+ .owl-carousel .owl-item img{
+     width: auto!important;
+     display: inline!important;
+ }
+
+ .testimoni {
+    background-image: url("https://i2.wp.com/www.sekolahmenyenangkan.org/wp-content/uploads/2019/07/sd-kalam-kudus-belajar-pencampuran-warna-IMG-20170906-WA0018.jpg?w=1280&ssl=1");
+ }
+
+ .partnerBg{
+    background-image: url("https://i1.wp.com/www.sekolahmenyenangkan.org/wp-content/uploads/2019/05/IMG-20190517-WA0004.jpg?w=1040&ssl=1");   
+ }
+
+ .daftarSekarang{
+     background-image: url("https://i0.wp.com/www.sekolahmenyenangkan.org/wp-content/uploads/2018/04/PicsArt_04-24-12.08.12.jpg?w=1024&ssl=1")
+ }

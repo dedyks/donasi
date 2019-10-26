@@ -1,0 +1,5 @@
+2019/02/25 09:10:31 [emerg] 6#6: unexpected ";" in /etc/nginx/sites-available/default.conf:3
+2019/02/25 09:11:53 [emerg] 6#6: unexpected ";" in /etc/nginx/sites-available/default.conf:3
+2019/04/24 06:29:13 [emerg] 8#8: "user" directive is not allowed here in /etc/nginx/sites-available/default.conf:1
+2019/05/14 09:25:28 [emerg] 6#6: unexpected end of file, expecting "}" in /etc/nginx/sites-available/default.conf:76
+2019/05/14 09:26:23 [emerg] 6#6: duplicate location "/" in /etc/nginx/sites-available/default.conf:45
