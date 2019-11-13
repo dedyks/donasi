@@ -10,7 +10,7 @@ class Users extends Eloquent
 {
     use Messagable;
     protected $connection = 'mongodb';
-    protected $collection = 'users';
+    protected $collection = 'users_donasi';
 
     protected $fillable = [
         'name',

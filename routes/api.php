@@ -119,6 +119,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('use-reg-coupon/{coupon_code}', 'Api\v1\RegCouponController@useRegCoupon');
     Route::post('login', 'Api\v1\PassportController@login');
     Route::post('register', 'Api\v1\PassportController@register');
+    Route::get('activation/check/{token}', 'Api\v1\PassportController@checkActivationToken');
+    Route::post('activation', 'Api\v1\PassportController@activation');
+
     Route::post('testregister', 'Api\v1\PassportController@emailRegister');
     Route::get('sekolah/crawl/{npsn}', 'Api\v1\SchoolGsmController@crawl');
 

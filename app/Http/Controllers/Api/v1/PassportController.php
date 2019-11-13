@@ -6,6 +6,7 @@ use Mailgun\Mailgun;
 use App\RegCoupon;
 use App\User;
 use App\Users;
+use App\Activation;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
@@ -21,13 +22,8 @@ class PassportController extends Controller
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-          'name' => 'required|min:3',
-          'email' => 'required|email|unique:users',
-          'password' => 'required|min:3',
-          'c_password' => 'required|same:password',
-          'attendedWorkshop' => 'required',
-          'school' => 'required',
-          'reg_coupon' => 'required',
+          'full_name' => 'required|min:3',
+          'email' => 'required|email|unique:users_donasi'
         ]);
 
         if ($validator->fails()) {
@@ -35,127 +31,65 @@ class PassportController extends Controller
             $validator->errors(),
           ], 417);
         }
-
-        //<< validasi reg coupon
-        $regCoupon = RegCoupon::where('coupon_code', $request->reg_coupon)->first();
-        if (!$regCoupon) {
-            return response()->json([
-            'message' => 'kupon tidak ditemukan',
-          ], 404);
-        }
-        $couponUsed = User::where('reg_coupon', $regCoupon)->count();
-        $regCoupon->coupon_used = $couponUsed;
-        $regCoupon->save();
-
-        if ($regCoupon->coupon_used >= $regCoupon->coupon_quota || strtotime('now') > strtotime($regCoupon->expired_date)) {
-            return response()->json([
-            'message' => 'kupon sudah tidak bisa digunakan',
-          ], 403);
-        }
-        //validasi reg coupon >>
-
-        $npsn = $request->input('school.npsn');
-        $school = SchoolGsm::where('npsn', $npsn);
-
-        $schoolHitung = $school->count();
-        if ($schoolHitung == 1) {
-            $schoolData = $school->first();
-
-            $user = User::create([
-              'name' => $request->name,
-              'email' => $request->email,
-              'password' => bcrypt($request->password),
-              'attendedWorkshop' => $request->attendedWorkshop,
-              'schoolgsm_id' => $schoolData->_id,
-              'sekolah' => $schoolData->sekolah,
-              'role' => 'user',
-              'request' => 'false',
-              'level' => 'basic',
-              'assessor_id' => null,
-              'photo_profile' => [],
-              'invited_by' => $request->input('invited_by'),
-              'fcm_token' => [],
-              'kupon' => [],
-              'reg_coupon' => $request->reg_coupon,
-            ]);
-            $userID = $user->id;
-            $thread = Thread::where('school_id', $schoolData->id)->first();
-            // return $thread;
-            $thread->addParticipant($userID);
-            $message = Message::create([
-              'thread_id' => $thread->id,
-              'user_id' => $userID,
-              'body' => '[BARU] Saya baru ditambahkan ke Group Chat',
-          ]);
-            // return $thread;
-            try {
-                // Validate the value...
-                $result = $this->sendEmailRegister($user, $school);
-            } catch (Exception $e) {
-                report($e);
-
-                return false;
-            }
-
-            return response()->json([
-              'name' => $user->name,
-              'message' => 'Register success!',
-              'data' => $result,
-            ], 201);
-        } elseif ($schoolHitung == 0) {
-            $longitude = floatval($request->input('school.bujur'));
-            $latitude = floatval($request->input('school.lintang'));
-
-            $school = new SchoolGsm();
-            $school->propinsi = $request->input('school.propinsi');
-            $school->npsn = $request->input('school.npsn');
-            $school->kode_kab_kota = $request->input('school.kode_kab_kota');
-            $school->kabupaten_kota = $request->input('school.kabupaten_kota');
-            $school->kode_kec = $request->input('school.kode_kec');
-            $school->kecamatan = $request->input('school.kecamatan');
-            $school->sekolah = $request->input('school.sekolah');
-            $school->kecamatan = $request->input('school.kecamatan');
-            $school->alamat_jalan = $request->input('school.alamat_jalan');
-            $school->status = $request->input('school.status');
-            $school->bentuk = $request->input('school.bentuk');
-            $school->lokasi = [$longitude, $latitude];
-            $school->model_gsm = [
-          'updated_date' => null,
-          'flag' => 'jejaring_gsm',
-        ];
-            $school->save();
-
-            $schoolBaru = SchoolGsm::where('npsn', $npsn)->first();
-            $user = User::create([
-          'name' => $request->name,
+        $user = new User([
+          'name' => $request->full_name,
           'email' => $request->email,
-          'password' => bcrypt($request->password),
-          'attendedWorkshop' => $request->attendedWorkshop,
-          'schoolgsm_id' => $schoolBaru->_id,
-          'sekolah' => $schoolBaru->sekolah,
-          'role' => 'user',
-          'request' => 'false',
-          'level' => 'basic',
-          'assessor_id' => null,
-          'photo_profile' => [],
-          'invited_by' => $request->input('invited_by'),
-          'fcm_token' => [],
-          'kupon' => [],
-          'reg_coupon' => $request->reg_coupons,
+          'is_activated' => false,
+          'password' => ''
         ]);
+        $user->save();
 
-            //mengirim Email
-            $result = $this->sendEmailRegister($user, $school);
-            $groupChat = $this->createGroupChat($schoolBaru, $user);
+        $objectID = new \MongoDB\BSON\ObjectID();
+        $oid = (string)$objectID;
 
-            return $groupChat;
+        $activation = new Activation([
+          'email' => $request->email,
+          'token' => $oid,
+        ]);
+        $activation->save();
 
-            return response()->json([
+        $result = $this->sendEmailRegister($user,$activation->token);
+
+        return response()->json([
           'name' => $user->name,
-          'message' => 'Register success!, sekolah baru terbuat',
+          'message' => 'Register success! cek email anda',
           'email' => $result,
         ], 201);
         }
+
+    public function checkActivationToken($token)
+    {
+      $check = Activation::where('token',$token)->first();
+      if ($check === null) {
+        // user doesn't exist
+        return response()->json([
+          'message' => 'Token tidak valid',
+        ], 404);
+     }
+     else{
+      return response()->json([
+        'message' => 'Token valid',
+      ], 200);
+     }
+    }
+    public function activation(Request $request)
+    {
+      $check = Activation::where('token',$request->input('token'))->first();
+      if ($check === null) {
+        // user doesn't exist
+        return response()->json([
+          'message' => 'Token tidak valid',
+        ], 404);
+     }
+     else{
+       $dataUser = User::where('email',$check->email)->first();
+       $dataUser->password = bcrypt($request->input('password'));
+       $dataUser->is_activated = true;
+       $dataUser->save();
+      return response()->json([
+        'message' => 'Berhasil aktivasi',
+      ], 200);
+     }
     }
 
     public function createGroupChat($schoolData, $userData)
@@ -455,7 +389,7 @@ class PassportController extends Controller
     ], 201);
     }
 
-    public function sendEmailRegister($user, $school)
+    public function sendEmailRegister($user, $token)
     {
         $dt = Carbon::now()->toFormattedDateString();
         $domain = env('MAILGUN_DOMAIN');
@@ -464,14 +398,14 @@ class PassportController extends Controller
         $mgClient = Mailgun::create($mailgun_api);
 
         $view = view('email.register', ['date' => $dt,
-      'user' => $user,
-      'school' => $school,
+      'name' => 'dedy kurniawan santoso',
+      'token' => $token,
       ])->render();
         try {
             $result = $mgClient->sendMessage($domain,
-            array('from' => 'Elearning GSM <postmaster@'.env('MAILGUN_FROM').'>',
+            array('from' => 'Donasi GSM <postmaster@'.env('MAILGUN_FROM').'>',
                 'to' => $user->email,
-                'subject' => 'Pendaftaran Elearning Gerakan Sekolah Menyenangkan',
+                'subject' => 'Aktivasi Akun Donasi Anda',
                 'html' => $view, ));
         } catch (MissingRequiredMIMEParameters $e) {
         }

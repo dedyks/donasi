@@ -13,7 +13,8 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable;
     use Messagable;
 
-
+    protected $connection = 'mongodb';
+    protected $collection = 'users_donasi';
     /**
      * The attributes that are mass assignable.
      *
@@ -22,20 +23,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
-        'attendedWorkshop',
-        'detail',
-        'school',
-        'role',
-        'schoolgsm_id',
-        'request',
-        'level',
-        'assessor_id',
-        'assessor_kuota_max',
-        'assessor_kuota_now',
-        'photo_profile',
-        'invited_by',
-        'kupon',
+        'is_activated',
     ];
     /**
      * The attributes that should be hidden for arrays.
