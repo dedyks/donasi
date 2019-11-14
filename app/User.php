@@ -23,6 +23,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'role',
         'is_activated',
     ];
     /**
@@ -43,10 +44,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function schoolgsm(){
-        return $this->belongsTo('App\SchoolGsm','schoolgsm_id');
+    public function donasi()
+    {
+        return $this->hasMany('App\Donasi','kampanye_id');
     }
-
     public function assessor(){
       return $this->belongsTo('App\User', 'assessor_id');
     }

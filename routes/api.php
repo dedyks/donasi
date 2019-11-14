@@ -111,7 +111,26 @@ Route::middleware('auth:api')->group(function () {
 
 //untuk versioning, nantinya endpoint akan seperti ini {{url}}/api/v1/login
 Route::group(['prefix' => 'v1'], function () {
-    //kupon
+    //kampanye
+    Route::post('kampanye', 'Api\v1\KampanyeController@create');
+    Route::get('kampanye', 'Api\v1\KampanyeController@all');
+    Route::get('kampanye/{id}', 'Api\v1\KampanyeController@get');
+    Route::put('kampanye/{id}', 'Api\v1\KampanyeController@put');
+    Route::delete('kampanye/{id}', 'Api\v1\KampanyeController@remove');
+
+    //donasi
+    Route::post('donasi', 'Api\v1\DonasiController@create');
+    Route::get('donasi', 'Api\v1\DonasiController@all');
+    Route::get('donasi/{id}', 'Api\v1\DonasiController@get');
+    Route::get('donasi/{id}/bayar', 'Api\v1\DonasiController@bayarDonasi');
+
+    Route::put('donasi/{id}', 'Api\v1\DonasiController@put');
+    Route::delete('donasi/{id}', 'Api\v1\DonasiController@remove');
+
+
+
+
+
 
     //filter artikel
 

@@ -11,7 +11,8 @@ class Activation extends Eloquent
 
     protected $fillable = [
         'email',
-        'token'
+        'token',
+        'used'
         ];
 
     protected $dates = [

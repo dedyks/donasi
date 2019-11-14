@@ -46,6 +46,11 @@ class SchoolGsm extends Eloquent {
         return $this->hasMany('App\User','schoolgsm_id');
     }
 
+    public function kampanye()
+    {
+        return $this->hasMany('App\Kampanye','schoolgsm_id');
+    }
+
     public function article()
     {
         return $this->hasMany('App\Article','schoolgsm_id');

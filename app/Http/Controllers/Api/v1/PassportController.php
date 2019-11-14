@@ -34,17 +34,19 @@ class PassportController extends Controller
         $user = new User([
           'name' => $request->full_name,
           'email' => $request->email,
+          'role' => 'user',
           'is_activated' => false,
           'password' => ''
         ]);
         $user->save();
 
-        $objectID = new \MongoDB\BSON\ObjectID();
+        $objectID =str_random(35);
         $oid = (string)$objectID;
 
         $activation = new Activation([
           'email' => $request->email,
           'token' => $oid,
+          'used' => false
         ]);
         $activation->save();
 
@@ -74,7 +76,7 @@ class PassportController extends Controller
     }
     public function activation(Request $request)
     {
-      $check = Activation::where('token',$request->input('token'))->first();
+      $check = Activation::where('token',$request->input('token'))->where('used',false)->first();
       if ($check === null) {
         // user doesn't exist
         return response()->json([
@@ -86,10 +88,13 @@ class PassportController extends Controller
        $dataUser->password = bcrypt($request->input('password'));
        $dataUser->is_activated = true;
        $dataUser->save();
+
+       $check->used = true;
+       $check->save();
       return response()->json([
         'message' => 'Berhasil aktivasi',
       ], 200);
-     }
+     }  
     }
 
     public function createGroupChat($schoolData, $userData)
@@ -117,6 +122,30 @@ class PassportController extends Controller
             'messages' => $message,
             'particapants' => $participant,
           ]);
+    }
+
+
+    public function sendWa(Request $request)
+    {
+        $sid = env('TWILIO_SID');
+        $token = env('TWILIO_TOKEN');
+        $twilio = new Client($sid, $token);
+        $ToInput = $request->input('to');
+        $BodyInput = $request->input('body');
+
+        $message = $twilio->messages
+                  ->create('whatsapp:+6282149324543', // to
+                           array(
+                               'from' => 'whatsapp:+14155238886',
+                               'body' => $BodyInput,
+                           )
+                  );
+
+        return response()->json([
+                    'status' => 201,
+                    'message' => 'Jika data tidak null, maka WA terkirim',
+                    'data' => $message->sid,
+                  ]);
     }
 
     public function login(Request $request)
@@ -162,20 +191,8 @@ class PassportController extends Controller
             //return json_decode((string) $response->getBody(), true);
             $result = json_decode((string) $response->getBody(), true);
 
-            if ($request->has('fcm_token')) {
-                $user->push('fcm_token', $request->input('fcm_token'), true);
-            }
-
-            //clear unused token
-            if (count($user->fcm_token) > 2) {
-                //clear fail token
-                $user->fcm_token = array_diff($user->fcm_token, ['loading...', 'Error retrieving Instance ID token.']);
-                $user->save();
-
-                $user->fcm_token = array_slice($user->fcm_token, -2, 2);
-                $user->save();
-            }
-
+  
+           
             $userData = Users::with('quiz', 'schoolgsm')->get()->find($user->id);
 
             return response()->json([
